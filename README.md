@@ -16,7 +16,7 @@ make build
 ## Benchmark
 
 | Circuit | Constraints |
-| --- | --- | --- |
+| --- | --- |
 | shareProof(10) | 304167 |
 | shareProof(50) | 1520827 |
 | shareProof_composite(50) | 1532454 |
