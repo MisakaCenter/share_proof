@@ -1,0 +1,6 @@
+**/*.r1cs
+**/*.sym
+output
+*.ptau
+*.zkey
+*.json
