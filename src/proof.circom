@@ -21,6 +21,13 @@ template nonDuplicate(nLength) {
 template strictlyIncreasing(nLength) {
     signal input in[nLength];
 
+    // range check
+    component range_check[nLength];
+    for (var i = 0; i < nLength; i++) {
+        range_check[i] = Num2Bits(252);
+        range_check[i].in <== in[i];
+    }
+
     component lt[nLength - 1];
     for (var i = 0; i < nLength - 1; i++) {
         lt[i] = LessThan(252);
@@ -50,11 +57,22 @@ template shareProof_composite(n) {
         inc_check.in[i] <== x[i - 1];
     }
 
+    // range check for upper_bound, since lower_bound and x_i are already checked in strictlyIncreasing
+    component range_check_upper_bound_check = Num2Bits(252);
+    range_check_upper_bound_check.in <== upper_bound;
+
+
     // check that x_n <= upper_bound
     component upper_bound_check = LessEqThan(252);
     upper_bound_check.in[0] <== x[n - 1];
     upper_bound_check.in[1] <== upper_bound;
     upper_bound_check.out === 1;
+
+    // range check for target
+    component range_check_target = Num2Bits(252);
+    range_check_target.in <== target;
+    // range check for sha result
+    component range_check_sha256_check[n];
 
     // compute sha256(header, x_i) for all i \in (1, 2, ..., n) and check that they are less than target
     component sha256_check[n];
@@ -65,11 +83,21 @@ template shareProof_composite(n) {
         sha256_check[i].a <== header;
         sha256_check[i].b <== x[i];
 
+        // range check
+        range_check_sha256_check[i] = Num2Bits(252);
+        range_check_sha256_check[i].in <== sha256_check[i].out;
+
         target_check[i] = LessThan(252);
         target_check[i].in[0] <== sha256_check[i].out;
         target_check[i].in[1] <== target;
         sum += target_check[i].out;
     }
+
+    // range check
+    component range_check_m_check = Num2Bits(252);
+    range_check_m_check.in <== m;
+    component range_check_sum_check = Num2Bits(252);
+    range_check_sum_check.in <== sum;
 
     // check that there are at least m different shares
     component m_check = LessEqThan(252);
@@ -93,6 +121,12 @@ template shareProof(n) {
         duplicate_check.in[i] <== x[i];
     }
 
+    // range check for target
+    component range_check_target = Num2Bits(252);
+    range_check_target.in <== target;
+    // range check for sha result
+    component range_check_sha256_check[n];
+
     // compute sha256(header, x_i) for all i \in (1, 2, ..., n) and check that they are less than target
     component sha256_check[n];
     component target_check[n];
@@ -102,11 +136,21 @@ template shareProof(n) {
         sha256_check[i].a <== header;
         sha256_check[i].b <== x[i];
 
+        // range check
+        range_check_sha256_check[i] = Num2Bits(252);
+        range_check_sha256_check[i].in <== sha256_check[i].out;
+
         target_check[i] = LessThan(252);
         target_check[i].in[0] <== sha256_check[i].out;
         target_check[i].in[1] <== target;
         sum += target_check[i].out;
     }
+
+    // range check
+    component range_check_m_check = Num2Bits(252);
+    range_check_m_check.in <== m;
+    component range_check_sum_check = Num2Bits(252);
+    range_check_sum_check.in <== sum;
 
     // check that there are at least m different shares
     component m_check = LessEqThan(252);
