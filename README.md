@@ -17,6 +17,6 @@ make build
 
 | Circuit | Constraints |
 | --- | --- |
-| shareProof(10) | 304167 |
-| shareProof(50) | 1520827 |
-| shareProof_composite(50) | 1532454 |
+| shareProof(10) | 307443 |
+| shareProof(50) | 1534183 |
+| shareProof_composite(50) | 1558914 |
